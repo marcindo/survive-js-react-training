@@ -1,54 +1,55 @@
 import React from 'react';
 import uuid from 'uuid';
 import Notes from './Notes';
+import connect from '../libs/connect';
 
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
-      this.state = {
-          notes: [
-              {
-                  id: uuid.v4(),
-                  task: 'Learn React'
-              },
-              {
-                  id: uuid.v4(),
-                  task: 'Do laundry'
-              }
-          ]
-      }
+    this.state = {
+      notes: [
+        {
+          id: uuid.v4(),
+          task: 'Learn React'
+        },
+        {
+          id: uuid.v4(),
+          task: 'Do laundry'
+        }
+      ]
+    }
   }
   render() {
-      const { notes } = this.state;
+    const { notes } = this.state;
 
-      return (
-          <div>
-              <button onClick = {this.addNote}>+</button>
-              <Notes
-                notes = {notes}
-                onNoteClick = {this.activateNoteEdit}
-                onEdit = {this.editNote}
-                onDelete = {this.deleteNote}
-              />
-          </div>
-      );
+    return (
+      <div>
+        <button className="add-note" onClick={this.addNote}>+</button>
+        <Notes
+          notes={notes}
+          onNoteClick={this.activateNoteEdit}
+          onEdit={this.editNote}
+          onDelete={this.deleteNote}
+        />
+      </div>
+    );
   }
   addNote = () => {
-      this.setState({
-          notes: [...this.state.notes, {
-              id: uuid.v4(),
-              task: 'New task'
-          }]
-      });
+    this.setState({
+      notes: [...this.state.notes, {
+        id: uuid.v4(),
+        task: 'New task'
+      }]
+    });
   }
 
   handleNoteEdit = (id, editing, task = null) => {
     this.setState({
       notes: this.state.notes.map(note => {
-        if(note.id === id) {
+        if (note.id === id) {
           note.editing = editing;
-          note.task = task? task: note.task
+          note.task = task ? task : note.task
         }
         return note;
       })
@@ -72,3 +73,5 @@ export default class App extends React.Component {
     });
   }
 }
+
+export default connect(() => {})(App)
