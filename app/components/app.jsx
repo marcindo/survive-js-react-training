@@ -2,26 +2,13 @@ import React from 'react';
 import uuid from 'uuid';
 import Notes from './Notes';
 import connect from '../libs/connect';
+import NoteActions from '../actions/NoteActions';
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notes: [
-        {
-          id: uuid.v4(),
-          task: 'Learn React'
-        },
-        {
-          id: uuid.v4(),
-          task: 'Do laundry'
-        }
-      ]
-    }
-  }
+
   render() {
-    const { notes } = this.state;
+    const { notes } = this.props;
 
     return (
       <div>
@@ -36,42 +23,29 @@ class App extends React.Component {
     );
   }
   addNote = () => {
-    this.setState({
-      notes: [...this.state.notes, {
+    this.props.NoteActions.create({
         id: uuid.v4(),
         task: 'New task'
-      }]
-    });
-  }
-
-  handleNoteEdit = (id, editing, task = null) => {
-    this.setState({
-      notes: this.state.notes.map(note => {
-        if (note.id === id) {
-          note.editing = editing;
-          note.task = task ? task : note.task
-        }
-        return note;
-      })
     });
   }
 
   activateNoteEdit = (id) => {
-    this.handleNoteEdit(id, true);
+    this.props.NoteActions.update({id, editing: true});
   }
 
   editNote = (id, task) => {
-    this.handleNoteEdit(id, false, task);
+    this.props.NoteActions.update({id, task, editing: false});
   }
 
   deleteNote = (id, e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
-
-    this.setState({
-      notes: this.state.notes.filter(note => note.id !== id)
-    });
+    this.props.NoteActions.delete(id);
   }
 }
 
-export default connect(() => {})(App)
+export default connect(({notes}) => ({
+  notes
+}), {
+  NoteActions
+})(App)
