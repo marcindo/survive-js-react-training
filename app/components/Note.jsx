@@ -4,7 +4,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import ItemTypes from '../constants/itemTypes';
 
 const Note = ({
-  connectDragSource, connectDropTarget, isDragging, 
+  connectDragSource, connectDropTarget, isDragging,
   isOver, onMove, id, editing, children, ...props
 }) => {
   // Pass through if we are editing
@@ -32,11 +32,25 @@ const noteTarget = {
     const sourceProps = monitor.getItem();
     const sourceId = sourceProps.id;
 
-    if(sourceId !== targetId) {
-      targetProps.onMove({sourceId, targetId});
+    if (sourceId !== targetId) {
+      targetProps.onMove({ sourceId, targetId });
     }
   }
 };
+
+Note.propTypes = {
+  id: React.PropTypes.string.isRequired,
+  editing: React.PropTypes.bool,
+  connectDragSource: React.PropTypes.func,
+  connectDropTarget: React.PropTypes.func,
+  isDragging: React.PropTypes.bool,
+  onMove: React.PropTypes.func,
+  children: React.PropTypes.node
+};
+Note.defaultProps = {
+  onMove: () => { }
+};
+
 export default compose(
   DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),

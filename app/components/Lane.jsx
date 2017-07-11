@@ -20,6 +20,22 @@ const Lane = ({
     })
   };
 
+  Lane.propTypes = {
+    lane: React.PropTypes.shape({
+      id: React.PropTypes.string.isRequired,
+      editing: React.PropTypes.bool,
+      name: React.PropTypes.string,
+      notes: React.PropTypes.array
+    }).isRequired,
+    LaneActions: React.PropTypes.object,
+    NoteActions: React.PropTypes.object,
+    connectDroptarget: React.PropTypes.func
+  };
+  Lane.defaultProps = {
+    name: '',
+    notes: []
+  };
+
   const activateNoteEdit = id => {
     NoteActions.update({ id, editing: true });
   };
